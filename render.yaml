@@ -1,0 +1,21 @@
+# yueji-fl-bridge Render Blueprint 部署配置
+# 悦济 v3.1 阶段 28F.3: 换 Render 平台 (HF Space Static SDK 不能跑 Python)
+# 拍板 (2026-07-27 01:00 冬生 'Render吧'): 思怡写 render.yaml, 冬生部署
+
+services:
+  - type: web
+    name: yueji-fl-bridge
+    runtime: python
+    plan: free  # Render free tier 750h/月 + 无需信用卡
+    region: oregon
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --timeout 120 --access-logfile - --error-logfile -
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.5"
+      - key: PORT
+        value: "10000"
+      - key: WEB_CONCURRENCY
+        value: "1"
