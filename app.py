@@ -44,7 +44,7 @@ app = FastAPI(
 # 跨域 (悦济云函数调没 cookie, CORS 放开)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=os.environ.get("CORS_ORIGINS","*").split(","),
     allow_methods=["*"],
     allow_headers=["*"],
 )
